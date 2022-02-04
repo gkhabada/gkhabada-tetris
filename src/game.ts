@@ -37,30 +37,43 @@ export default class game {
     ],
   };
 
-  space: Array<Array<number>> = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ];
+  static readonly pointsCount: Object = {
+    1: 100,
+    2: 300,
+    3: 700,
+    4: 1500,
+  };
+
+  space: Array<Array<number>> = this.createSpace();
+  totalPoint: number = 0;
   activeItem : Object = this.createItem();
   nextItem: Object = this.createItem();
+
+  createSpace() {
+    const space : Array<Array<number>> = [];
+
+    for (let row = 0; row < 20; row++) {
+      space.push([]);
+      for (let col = 0; col < 10; col++) {
+        space[row].push(0);
+      }
+    }
+    return space;
+  }
+
+  createItem(): Object {
+    const blockNames : Array<string> = Object.keys(game.blockTypes);
+    const randomKey : string = blockNames[Math.floor(Math.random() * blockNames.length)];
+    const blockValue: Array<Array<number>> = game.blockTypes[randomKey];
+    
+    const offsetX = Math.floor((10 / 2) - (blockValue .length / 2)); 
+    
+    return {
+      x: offsetX,
+      y: -1,
+      block: blockValue,
+    };
+  }
 
   lockItem() {
     const { x, y, block } = this.activeItem;
@@ -90,41 +103,6 @@ export default class game {
     return false; 
   }
 
-  init() {
-    document.addEventListener('keydown', (e) => {
-      switch(e.key) {
-        case 'ArrowLeft':
-          this.moveItemLeft();
-          break;
-        case 'ArrowRight':
-          this.moveItemRight();
-          break;
-        case 'ArrowDown':
-          this.moveItemDown();
-          break;
-        case 'ArrowUp':
-          this.rotateItemRight();
-          break;
-        default:
-          return null;
-      };
-    });
-  }
-
-  createItem(): Object {
-    const blockNames : Array<string> = Object.keys(game.blockTypes);
-    const randomKey : string = blockNames[Math.floor(Math.random() * blockNames.length)];
-    const blockValue: Array<Array<number>> = game.blockTypes[randomKey];
-    
-    const offsetX = Math.floor((10 / 2) - (blockValue .length / 2)); 
-    
-    // const randomIndex;
-    return {
-      x: offsetX,
-      y: -1,
-      block: blockValue,
-    };
-  }
 
   moveItemLeft() {
     this.activeItem.x -= 1;
@@ -148,6 +126,8 @@ export default class game {
     if (this.blockIsOffset()) {
       this.activeItem.y -= 1;
       this.lockItem();
+      this.updateSpaceBlock();
+      this.clearLines();
     }
   }
 
@@ -172,8 +152,6 @@ export default class game {
   }
 
   getPlaySpace() {
-    console.log(11111);
-    
     const currentSpace = JSON.parse(JSON.stringify(this.space));
 
     const { x, y, block } = this.activeItem;
@@ -185,6 +163,37 @@ export default class game {
     });
 
     return currentSpace;
+  }
+
+  updateSpaceBlock() {
+    this.activeItem = this.nextItem;
+    this.nextItem = this.createItem();
+  }
+
+  clearLines() {
+    const space = this.getPlaySpace();
+    const rowsLength = space.length;
+    const colsLength = space[0].length;
+    const fillLines = [];
+    const newRow : Array<number> = [];
+    for (let col = 0; col < 10; col++) {
+      newRow.push(0);
+    }
+
+    for(let row = rowsLength - 1; row; row--) {
+      const lineItems = space[row].filter((item: any) => item).length;
+      
+      if (lineItems === colsLength) {
+        fillLines.push(row);
+      }
+    }
+
+    fillLines.forEach(line => {
+      this.space.splice(line, 1);
+      this.space.unshift([...newRow]);
+    });
+
+    this.totalPoint += game.pointsCount[fillLines.length] || 0;
   }
 
 }
