@@ -1,5 +1,5 @@
 export default class game {
-  static readonly blockTypes = {
+  private readonly blockTypes = {
     'I': [
       [0, 0, 0, 0],
       ['I', 'I', 'I', 'I'],
@@ -37,34 +37,44 @@ export default class game {
     ],
   };
 
-  static readonly pointsCount: Object = {
+  private readonly pointsCount: Object = {
     1: 100,
     2: 300,
     3: 700,
     4: 1500,
   };
 
-  space: Array<Array<number>> = this.createSpace();
+  get speed() {
+    if (this.pointsCount > 10000) return 300;
+    if (this.pointsCount > 7000) return 400;
+    if (this.pointsCount > 3000) return 500;
+    if (this.pointsCount > 1000) return 600;
+    return 700;
+  };
+  
+  status: boolean = true;
+
+  space: Array<Array<number>> = this.createSpace(20, 10);
   totalPoint: number = 0;
   activeItem : Object = this.createItem();
   nextItem: Object = this.createItem();
 
-  createSpace() {
+  createSpace(rows: number, cols: number) {
     const space : Array<Array<number>> = [];
 
-    for (let row = 0; row < 20; row++) {
+    for (let row = 0; row < rows; row++) {
       space.push([]);
-      for (let col = 0; col < 10; col++) {
+      for (let col = 0; col < cols; col++) {
         space[row].push(0);
       }
     }
     return space;
-  }
+  };
 
   createItem(): Object {
-    const blockNames : Array<string> = Object.keys(game.blockTypes);
+    const blockNames : Array<string> = Object.keys(this.blockTypes);
     const randomKey : string = blockNames[Math.floor(Math.random() * blockNames.length)];
-    const blockValue: Array<Array<number>> = game.blockTypes[randomKey];
+    const blockValue: Array<Array<number>> = this.blockTypes[randomKey];
     
     const offsetX = Math.floor((10 / 2) - (blockValue .length / 2)); 
     
@@ -73,7 +83,7 @@ export default class game {
       y: -1,
       block: blockValue,
     };
-  }
+  };
 
   lockItem() {
     const { x, y, block } = this.activeItem;
@@ -85,7 +95,7 @@ export default class game {
         }
       }
     }
-  }
+  };
 
   blockIsOffset(): boolean {
     const { x, y, block } = this.activeItem;
@@ -101,7 +111,7 @@ export default class game {
       }
     }
     return false; 
-  }
+  };
 
 
   moveItemLeft() {
@@ -131,24 +141,29 @@ export default class game {
     }
   }
 
-  rotateItemRight() {
-    this.rotateItem();
-
-    if (this.blockIsOffset()) {
-      this.rotateItem(false);
-    }
-  }
-
-  rotateItem(clockwise : boolean = true) {
+  rotateItem() {
     let { block } = this.activeItem;
+    const length = block.length;
 
-    const rotateBlock = block[0].map((_: number, colIndex : number) => {
-      const newRow = block.map((row : Array<number>) => row[colIndex]);
-      if (clockwise) return newRow.reverse();
-      return newRow;
-    });
+    const rotateBlock = this.createSpace(length, length);
+    
+    for (let y = 0; y < length; y++) {
+      for(let x = 0; x < length; x++) {
+        rotateBlock[x][y] = block[length - 1 - y][x];        
+      }
+    }
+
+    // let rotateBlock = block[0].map((_: number, colIndex : number) => {
+    //   const newRow = block.map((row : Array<number>) => row[colIndex]);
+    //   if (clockwise) return newRow.reverse();
+    //   return newRow;
+    // });
 
     this.activeItem.block = rotateBlock;
+
+    if (this.blockIsOffset()) {
+      this.activeItem.block = block;
+    }
   }
 
   getPlaySpace() {
@@ -193,7 +208,11 @@ export default class game {
       this.space.unshift([...newRow]);
     });
 
-    this.totalPoint += game.pointsCount[fillLines.length] || 0;
+    this.totalPoint += this.pointsCount[fillLines.length] || 0;
+
+    if (fillLines.length) {
+      this.clearLines();
+    }
   }
 
 }

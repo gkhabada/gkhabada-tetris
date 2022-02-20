@@ -1,4 +1,14 @@
 export default class view {
+  element: HTMLElement
+  width: number
+  height: number
+  rows: number
+  cols: number
+  canvas: HTMLElement
+  context: HTMLElement
+  cellWidth: number
+
+
   constructor(
     element: HTMLElement,
     width: number, 
@@ -52,6 +62,12 @@ export default class view {
         this.context.strokeRect(col * this.cellWidth, row * this.cellWidth, this.cellWidth, this.cellWidth);
       }
     }
+  }
+
+  setScore(points: number) {
+    const info : HTMLElement = document.getElementById('tetris-info');
+    info.querySelector('.score').innerHTML = points;
+    // elementP.innerHTML = ` ${points}`;
   }
 
 

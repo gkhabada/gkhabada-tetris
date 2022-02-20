@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  position: relative;
 }
 
 #app {
@@ -15,4 +16,10 @@ body {
 h1 {
   font-family: 'Alegreya SC', serif;
   letter-spacing: 0.5rem;
+}
+
+#tetris-info {
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }
