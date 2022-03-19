@@ -1,3 +1,5 @@
+import { STATUS } from "./constants";
+
 export default class game {
   private readonly blockTypes = {
     'I': [
@@ -52,7 +54,7 @@ export default class game {
     return 700;
   };
   
-  status: boolean = true;
+  status: number = STATUS.new;
 
   space: Array<Array<number>> = this.createSpace(20, 10);
   totalPoint: number = 0;
@@ -90,7 +92,9 @@ export default class game {
 
     for (let i = 0; i < block.length; i++) {
       for (let j = 0; j <block[i].length; j++) {
-        if (block[i][j]) {
+        if (i + y < 0) {
+          this.gameOver();
+        } else if (block[i][j]) {
           this.space[i + y][j + x] = block[i][j];
         }
       }
@@ -213,6 +217,15 @@ export default class game {
     if (fillLines.length) {
       this.clearLines();
     }
+    return true;
   }
 
+  gameOver() {
+    this.status = STATUS.game_over;
+  }
+
+  restart() {
+    this.space = this.createSpace(20, 10);
+  }
+  
 }

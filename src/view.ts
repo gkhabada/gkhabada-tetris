@@ -1,3 +1,5 @@
+import { STATUS } from './constants';
+
 export default class view {
   element: HTMLElement
   width: number
@@ -70,5 +72,32 @@ export default class view {
     // elementP.innerHTML = ` ${points}`;
   }
 
+  changeStatus(status : number) {
+    let text : string = '';
+
+    switch (status) {
+      case STATUS.pause:
+        text = 'Game pause, press enter for continue';
+        break;
+      case STATUS.game_over:
+        text = 'Game over, press enter to restart';
+        break;
+      case STATUS.new:
+        text = 'Press enter for game start';
+        break;
+      default:
+        text = '';
+    };
+
+    if (text.length) {
+      this.context.fillStyle = 'rgba(0, 0, 0, .7)';
+      this.context.fillRect(0, 0, this.width, this.height);
+
+      this.context.font = '32px sans';
+      this.context.fillStyle = 'white';
+      this.context.textAlign = 'center';
+      this.context.fillText(text, this.width / 2, this.height / 2, this.width * 0.8);
+    }    
+  }
 
 }
