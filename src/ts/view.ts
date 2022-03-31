@@ -67,7 +67,7 @@ export default class view {
   }
 
   setScore(points: number) {
-    const info : HTMLElement = document.getElementById('tetris-info');
+    const info : HTMLElement = document.getElementById('tetris__info');
     info.querySelector('.score').innerHTML = points;
     // elementP.innerHTML = ` ${points}`;
   }

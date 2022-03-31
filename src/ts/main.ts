@@ -2,7 +2,7 @@ import { STATUS } from './constants';
 import Game from './game';
 import View from './view';
 
-const app = document.getElementById('app');
+const app = document.getElementById('tetris');
 
 const game = new Game();
 const view = new View(app, 320, 640, 20, 10);

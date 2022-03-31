@@ -4,20 +4,38 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="src/style.css">
+    <link rel="stylesheet" href="src/styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500&display=swap" rel="stylesheet">
     <title>Gkhabada tetris</title>
   </head>
   <body>
-    <div id="app">
+    <div id="tetris">
       <h1>Tetris</h1>
-      <div id="tetris-info">
+
+      <div class="tetris__menu">
+        <ul class="menu__list">
+          <li>
+            <button class="menu__item">Play</button>
+          </li>
+          <li>
+            <button class="menu__item">Restart</button>
+          </li>
+          <li>
+            <button class="menu__item">High score</button>
+          </li>
+          <li>
+            <button class="menu__item">Settings</button>
+          </li>
+        </ul>
+      </div>
+
+      <div id="tetris__info">
         <p>
           score:
           <span class="score">0</span>
         </p>
       </div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/ts/main.ts"></script>
   </body>
 </html>
