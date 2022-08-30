@@ -1,4 +1,4 @@
-import { STATUS } from "./constants";
+import { STATUS, STORAGE_KEY } from "./constants";
 
 export default class game {
   private readonly blockTypes = {
@@ -213,6 +213,9 @@ export default class game {
     });
 
     this.totalPoint += this.pointsCount[fillLines.length] || 0;
+
+    const storageScore : number = Number(localStorage.getItem(STORAGE_KEY) || 0);
+    localStorage.setItem(STORAGE_KEY, `${Math.max(this.totalPoint, storageScore)}`);
 
     if (fillLines.length) {
       this.clearLines();

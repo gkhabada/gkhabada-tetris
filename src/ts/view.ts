@@ -2,12 +2,13 @@ import { STATUS } from './constants';
 
 export default class view {
   element: HTMLElement
+  menu: HTMLElement
   width: number
   height: number
   rows: number
   cols: number
-  canvas: HTMLElement
-  context: HTMLElement
+  canvas: HTMLCanvasElement
+  context: any
   cellWidth: number
 
 
@@ -17,8 +18,10 @@ export default class view {
     height: number,
     rows: number,
     cols: number,
+    menu: HTMLElement,
   ) {
     this.element = element;
+    this.menu = menu;
     this.width = width;
     this.height = height;
     this.rows = rows;
@@ -73,31 +76,20 @@ export default class view {
   }
 
   changeStatus(status : number) {
-    let text : string = '';
-
     switch (status) {
       case STATUS.pause:
-        text = 'Game pause, press enter for continue';
+        this.menu.style.display = 'flex';
         break;
       case STATUS.game_over:
-        text = 'Game over, press enter to restart';
+        this.menu.style.display = 'flex';
         break;
       case STATUS.new:
-        text = 'Press enter for game start';
+        this.menu.style.display = 'flex';
         break;
       default:
-        text = '';
-    };
-
-    if (text.length) {
-      this.context.fillStyle = 'rgba(0, 0, 0, .7)';
-      this.context.fillRect(0, 0, this.width, this.height);
-
-      this.context.font = '32px sans';
-      this.context.fillStyle = 'white';
-      this.context.textAlign = 'center';
-      this.context.fillText(text, this.width / 2, this.height / 2, this.width * 0.8);
-    }    
+        this.menu.style.display = "none";
+    };    
   }
+
 
 }
