@@ -88,7 +88,7 @@ export default class view {
         break;
       default:
         this.menu.style.display = "none";
-    };    
+    }    
   }
 
 

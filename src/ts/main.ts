@@ -11,7 +11,7 @@ const view = new View(app, 320, 640, 20, 10, menu);
 // window.game = game;
 // window.view = view;
 
-let gameProcess : number = 0;
+let gameProcess  = 0;
 
 const startGame = () => {
   if (game.status === STATUS.game_over) {
@@ -67,7 +67,7 @@ document.addEventListener('keydown', (e) => {
         break;
       default:
         return null;
-    };
+    }
   } else if (e.key === 'Enter') {
     startGame();
   }
@@ -87,7 +87,7 @@ menu.addEventListener('click', (e) => {
         break;
       }
       case 'score': {
-        const storageScore : number = Number(localStorage.getItem(STORAGE_KEY) || 0);
+        const storageScore  = Number(localStorage.getItem(STORAGE_KEY) || 0);
         alert(`Максимально набранный балл: ${Math.max(storageScore, game.totalPoint)}`);
         break;
       }

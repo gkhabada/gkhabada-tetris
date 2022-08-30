@@ -52,12 +52,12 @@ export default class game {
     if (this.pointsCount > 3000) return 500;
     if (this.pointsCount > 1000) return 600;
     return 700;
-  };
+  }
   
   status: number = STATUS.new;
 
   space: Array<Array<number>> = this.createSpace(20, 10);
-  totalPoint: number = 0;
+  totalPoint = 0;
   activeItem : Object = this.createItem();
   nextItem: Object = this.createItem();
 
@@ -71,7 +71,7 @@ export default class game {
       }
     }
     return space;
-  };
+  }
 
   createItem(): Object {
     const blockNames : Array<string> = Object.keys(this.blockTypes);
@@ -85,7 +85,7 @@ export default class game {
       y: -1,
       block: blockValue,
     };
-  };
+  }
 
   lockItem() {
     const { x, y, block } = this.activeItem;
@@ -99,7 +99,7 @@ export default class game {
         }
       }
     }
-  };
+  }
 
   blockIsOffset(): boolean {
     const { x, y, block } = this.activeItem;
@@ -115,7 +115,7 @@ export default class game {
       }
     }
     return false; 
-  };
+  }
 
 
   moveItemLeft() {
@@ -146,7 +146,7 @@ export default class game {
   }
 
   rotateItem() {
-    let { block } = this.activeItem;
+    const { block } = this.activeItem;
     const length = block.length;
 
     const rotateBlock = this.createSpace(length, length);
@@ -214,7 +214,7 @@ export default class game {
 
     this.totalPoint += this.pointsCount[fillLines.length] || 0;
 
-    const storageScore : number = Number(localStorage.getItem(STORAGE_KEY) || 0);
+    const storageScore  = Number(localStorage.getItem(STORAGE_KEY) || 0);
     localStorage.setItem(STORAGE_KEY, `${Math.max(this.totalPoint, storageScore)}`);
 
     if (fillLines.length) {
