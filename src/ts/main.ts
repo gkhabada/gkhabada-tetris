@@ -96,7 +96,7 @@ menu.addEventListener('click', (e) => {
       }
     }
   }
-},);
+});
 
 
 view.render(game.getPlaySpace());

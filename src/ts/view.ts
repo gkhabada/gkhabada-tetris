@@ -8,7 +8,7 @@ export default class view {
   rows: number
   cols: number
   canvas: HTMLCanvasElement
-  context: any
+  context: CanvasRenderingContext2D | null
   cellWidth: number
 
 

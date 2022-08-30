@@ -39,6 +39,8 @@ export default class game {
     ],
   };
 
+  
+  // eslint-disable-next-line
   private readonly pointsCount: Object = {
     1: 100,
     2: 300,
@@ -58,7 +60,9 @@ export default class game {
 
   space: Array<Array<number>> = this.createSpace(20, 10);
   totalPoint = 0;
+  // eslint-disable-next-line
   activeItem : Object = this.createItem();
+  // eslint-disable-next-line
   nextItem: Object = this.createItem();
 
   createSpace(rows: number, cols: number) {
@@ -73,6 +77,7 @@ export default class game {
     return space;
   }
 
+  // eslint-disable-next-line
   createItem(): Object {
     const blockNames : Array<string> = Object.keys(this.blockTypes);
     const randomKey : string = blockNames[Math.floor(Math.random() * blockNames.length)];
@@ -200,7 +205,7 @@ export default class game {
     }
 
     for(let row = rowsLength - 1; row; row--) {
-      const lineItems = space[row].filter((item: any) => item).length;
+      const lineItems = space[row].filter((item: [number]) => item).length;
       
       if (lineItems === colsLength) {
         fillLines.push(row);
