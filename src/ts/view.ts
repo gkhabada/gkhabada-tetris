@@ -1,4 +1,4 @@
-import { STATUS } from './constants';
+import { STATUS, BUTTONS, buttonsText } from './constants';
 
 export default class view {
   element: HTMLElement
@@ -75,15 +75,30 @@ export default class view {
     // elementP.innerHTML = ` ${points}`;
   }
 
+  setMenuButtons(buttons: Array<string>) {
+    const menuList : HTMLElement = this.menu.querySelector('.menu__list');
+    menuList.innerHTML = ''
+    buttons.forEach((button: string) => {
+      menuList.insertAdjacentHTML('beforeend', `
+        <li>
+          <button data-status="${button}" class="menu__item">${buttonsText[button]}</button>
+        </li>
+      `);
+    });
+  }
+
   changeStatus(status : number) {
     switch (status) {
       case STATUS.pause:
+        this.setMenuButtons([BUTTONS.resume, BUTTONS.restart, BUTTONS.score, BUTTONS.settings]);
         this.menu.style.display = 'flex';
         break;
       case STATUS.game_over:
+        this.setMenuButtons([BUTTONS.restart, BUTTONS.score, BUTTONS.settings]);
         this.menu.style.display = 'flex';
         break;
       case STATUS.new:
+        this.setMenuButtons([BUTTONS.play, BUTTONS.score, BUTTONS.settings]);
         this.menu.style.display = 'flex';
         break;
       default:

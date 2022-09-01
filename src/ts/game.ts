@@ -1,6 +1,17 @@
 import { STATUS, STORAGE_KEY } from "./constants";
 
 export default class game {
+  rows: number
+  cols: number
+
+  constructor(
+    rows: number,
+    cols: number,
+  ) {
+    this.rows = rows;
+    this.cols = cols;
+  }
+
   private readonly blockTypes = {
     'I': [
       [0, 0, 0, 0],
@@ -58,7 +69,7 @@ export default class game {
   
   status: number = STATUS.new;
 
-  space: Array<Array<number>> = this.createSpace(20, 10);
+  space: Array<Array<number>> = [];
   totalPoint = 0;
   // eslint-disable-next-line
   activeItem : Object = this.createItem();
@@ -176,6 +187,10 @@ export default class game {
   }
 
   getPlaySpace() {
+    if (!this.space.length) {
+      this.space = this.createSpace(this.rows, this.cols);
+    }
+
     const currentSpace = JSON.parse(JSON.stringify(this.space));
 
     const { x, y, block } = this.activeItem;
@@ -233,7 +248,9 @@ export default class game {
   }
 
   restart() {
-    this.space = this.createSpace(20, 10);
+    this.activeItem = this.createItem();
+    this.space = this.createSpace(this.rows, this.cols);
+    this.totalPoint = 0;
   }
   
 }
