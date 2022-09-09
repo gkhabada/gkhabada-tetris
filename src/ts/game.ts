@@ -1,5 +1,13 @@
 import { STATUS, STORAGE_KEY } from "./constants";
 
+type tBlock = Array<Array<number>>;
+
+interface iItem {
+  x: number,
+  y: number,
+  block: tBlock,
+}
+
 export default class game {
   rows: number
   cols: number
@@ -12,7 +20,7 @@ export default class game {
     this.cols = cols;
   }
 
-  private readonly blockTypes = {
+  private readonly blockTypes : any = {
     'I': [
       [0, 0, 0, 0],
       ['I', 'I', 'I', 'I'],
@@ -52,7 +60,7 @@ export default class game {
 
   
   // eslint-disable-next-line
-  private readonly pointsCount: Object = {
+  private readonly pointsCount: any = {
     1: 100,
     2: 300,
     3: 700,
@@ -60,24 +68,22 @@ export default class game {
   };
 
   get speed() {
-    if (this.pointsCount > 10000) return 300;
-    if (this.pointsCount > 7000) return 400;
-    if (this.pointsCount > 3000) return 500;
-    if (this.pointsCount > 1000) return 600;
+    if (this.totalPoint > 10000) return 300;
+    if (this.totalPoint > 7000) return 400;
+    if (this.totalPoint > 3000) return 500;
+    if (this.totalPoint > 1000) return 600;
     return 700;
   }
   
   status: number = STATUS.new;
 
-  space: Array<Array<number>> = [];
+  space: tBlock = [];
   totalPoint = 0;
-  // eslint-disable-next-line
-  activeItem : Object = this.createItem();
-  // eslint-disable-next-line
-  nextItem: Object = this.createItem();
+  activeItem : iItem = this.createItem();
+  nextItem: iItem = this.createItem();
 
   createSpace(rows: number, cols: number) {
-    const space : Array<Array<number>> = [];
+    const space : tBlock = [];
 
     for (let row = 0; row < rows; row++) {
       space.push([]);
@@ -89,12 +95,12 @@ export default class game {
   }
 
   // eslint-disable-next-line
-  createItem(): Object {
+  createItem(): iItem {
     const blockNames : Array<string> = Object.keys(this.blockTypes);
     const randomKey : string = blockNames[Math.floor(Math.random() * blockNames.length)];
-    const blockValue: Array<Array<number>> = this.blockTypes[randomKey];
+    const blockValue: tBlock = this.blockTypes[randomKey];
     
-    const offsetX = Math.floor((10 / 2) - (blockValue .length / 2)); 
+    const offsetX : number = Math.floor((10 / 2) - (blockValue .length / 2)); 
     
     return {
       x: offsetX,
@@ -104,7 +110,7 @@ export default class game {
   }
 
   lockItem() {
-    const { x, y, block } = this.activeItem;
+    const { x, y, block } : iItem = this.activeItem;
 
     for (let i = 0; i < block.length; i++) {
       for (let j = 0; j <block[i].length; j++) {
@@ -118,11 +124,12 @@ export default class game {
   }
 
   blockIsOffset(): boolean {
-    const { x, y, block } = this.activeItem;
+    const { x, y, block } : iItem = this.activeItem;
 
     for (let row = 0; row < block.length; row++) {
       for (let col = 0; col <block[row].length; col++) {
-        if (block[row][col] 
+        if (
+          block[row][col] 
           && ((this.space[y + row] === undefined || this.space[y + row][x + col] === undefined) 
           || this.space[y + row][x + col])
         ) {
@@ -173,12 +180,6 @@ export default class game {
       }
     }
 
-    // let rotateBlock = block[0].map((_: number, colIndex : number) => {
-    //   const newRow = block.map((row : Array<number>) => row[colIndex]);
-    //   if (clockwise) return newRow.reverse();
-    //   return newRow;
-    // });
-
     this.activeItem.block = rotateBlock;
 
     if (this.blockIsOffset()) {
@@ -197,7 +198,9 @@ export default class game {
 
     block.forEach((row, rowIndex) => {
       row.forEach((val, colIndex) => {
-        if (val && currentSpace[y + rowIndex]) currentSpace[y + rowIndex][x + colIndex] = val;
+        if (val && currentSpace[y + rowIndex]) {
+          currentSpace[y + rowIndex][x + colIndex] = val;
+        }
       })
     });
 
@@ -214,22 +217,36 @@ export default class game {
     const rowsLength = space.length;
     const colsLength = space[0].length;
     const fillLines = [];
-    const newRow : Array<number> = [];
-    for (let col = 0; col < 10; col++) {
-      newRow.push(0);
-    }
+
+    const newRow : Array<number> = new Array(10).fill(0, 0);
+    // const newRow : Array<number> = [];
+    // for (let col = 0; col < colsLength; col++) {
+    //   newRow.push(0);
+    // }
 
     for(let row = rowsLength - 1; row; row--) {
       const lineItems = space[row].filter((item: [number]) => item).length;
       
       if (lineItems === colsLength) {
         fillLines.push(row);
+        // eslint-disable-next-line
+        // debugger;
       }
     }
 
-    fillLines.forEach(line => {
-      this.space.splice(line, 1);
+    console.log('space', this.space);
+    console.log('fillLines', fillLines);
+    
+    fillLines.forEach((line : number, index) => {
+      // eslint-disable-next-line
+      // debugger;
+
+      // если 2 и более строк то индекс смещается вниз, по мере удаления строк
+      this.space.splice(line + index, 1);
       this.space.unshift([...newRow]);
+
+      // eslint-disable-next-line
+      // debugger;
     });
 
     this.totalPoint += this.pointsCount[fillLines.length] || 0;

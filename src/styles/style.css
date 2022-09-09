@@ -85,3 +85,20 @@ h1 {
   background-color:#505050;
   color: #fafafa;
 }
+
+.menu__item-setting {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu__item-setting label {
+  line-height: 1.5;
+  font-size: 16px;
+  text-align: left;
+}
+
+.menu__item-setting input, 
+.menu__item-setting select {
+  padding: 6px 12px;
+  font-size: 16px;
+}

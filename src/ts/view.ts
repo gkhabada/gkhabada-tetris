@@ -8,7 +8,7 @@ export default class view {
   rows: number
   cols: number
   canvas: HTMLCanvasElement
-  context: CanvasRenderingContext2D | null
+  context: CanvasRenderingContext2D
   cellWidth: number
 
 
@@ -34,11 +34,11 @@ export default class view {
     
     this.element.appendChild(this.canvas);
 
-    this.context = this.canvas.getContext('2d');
+    this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     this.cellWidth = this.width / this.cols;
   }
 
-  static readonly itemColor = {
+  static readonly itemColor : any = {
     'I': 'cyan',
     'J': 'blue',
     'L': 'orange',
@@ -70,14 +70,15 @@ export default class view {
   }
 
   setScore(points: number) {
-    const info : HTMLElement = document.getElementById('tetris__info');
-    info.querySelector('.score').innerHTML = points;
+    const infoElem = document.getElementById('tetris__info') as HTMLElement;
+    const scoreElem = infoElem.querySelector('.score') as HTMLElement;
+    scoreElem.innerHTML = `${points}`;
     // elementP.innerHTML = ` ${points}`;
   }
 
   setMenuButtons(buttons: Array<string>) {
-    const menuList : HTMLElement = this.menu.querySelector('.menu__list');
-    menuList.innerHTML = ''
+    const menuList = this.menu.querySelector('.menu__list') as HTMLElement;
+    menuList.innerHTML = '';
     buttons.forEach((button: string) => {
       menuList.insertAdjacentHTML('beforeend', `
         <li>
@@ -106,5 +107,34 @@ export default class view {
     }    
   }
 
+  showScore(score: number) {
+    const menuList = this.menu.querySelector('.menu__list') as HTMLElement;
+    this.setMenuButtons([BUTTONS.close]);
+    menuList.insertAdjacentHTML('afterbegin', `
+      <li>Ваш максимально набранный балл: ${score}</li>
+    `);
+  }
 
+  showSettingMenu() {
+    const menuList = this.menu.querySelector('.menu__list') as HTMLElement;
+    this.setMenuButtons([BUTTONS.close]);
+
+    menuList.insertAdjacentHTML('afterbegin', `
+      <li class="menu__item-setting">
+        <label for="name">Имя пользователя</label>
+        <input id="name" value="User">
+      </li>
+      <li class="menu__item-setting">
+        <label for="size">Размер поля</label>
+        <select id="size">
+          <option>Маленький (7x14)</option>
+          <option>Средний (10x20)</option>
+          <option>Большой (15x30)</option>
+        </select>
+      </li>
+      <li>
+        <button class="menu__item">Сохранить</button>
+      </li>
+    `);
+  }
 }
