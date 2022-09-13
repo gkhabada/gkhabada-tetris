@@ -69,11 +69,12 @@ export default class view {
     }
   }
 
-  setScore(points: number) {
+  setScore(points: number, speed: number) {
     const infoElem = document.getElementById('tetris__info') as HTMLElement;
     const scoreElem = infoElem.querySelector('.score') as HTMLElement;
     scoreElem.innerHTML = `${points}`;
-    // elementP.innerHTML = ` ${points}`;
+    const speedElem = infoElem.querySelector('.speed') as HTMLElement;
+    speedElem.innerHTML = ` ${speed}`;
   }
 
   setMenuButtons(buttons: Array<string>) {

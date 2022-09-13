@@ -68,11 +68,7 @@ export default class game {
   };
 
   get speed() : number {
-    if (this.totalPoint > 10000) return 300;
-    if (this.totalPoint > 7000) return 400;
-    if (this.totalPoint > 3000) return 500;
-    if (this.totalPoint > 1000) return 600;
-    return 700;
+    return Math.ceil((100 - this.totalPoint / 100)/10) * 100
   }
   
   status: number = STATUS.new;
@@ -228,9 +224,6 @@ export default class game {
       }
     }
 
-    console.log('space', this.space);
-    console.log('fillLines', fillLines);
-    
     fillLines.forEach((line : number, index) => {
       // если 2 и более строк то индекс смещается вниз, по мере удаления строк
       this.space.splice(line + index, 1);
