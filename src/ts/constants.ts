@@ -7,7 +7,7 @@ export enum STATUS {
 
 export const STORAGE_KEY = 'TETRIS_SCORE';
 
-export const BUTTONS : any = { 
+export const BUTTONS : { [name: string]: string } = { 
   play: 'play',
   resume: 'resume',
   restart: 'restart',
@@ -17,7 +17,7 @@ export const BUTTONS : any = {
   close: 'close',
 };
 
-export const buttonsText : any = {
+export const buttonsText : { [name: string]: string } = {
   [BUTTONS.play]: 'Начать',
   [BUTTONS.resume]: 'Продолжить',
   [BUTTONS.restart]: 'Начать заново',

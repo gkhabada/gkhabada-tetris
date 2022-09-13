@@ -3,9 +3,9 @@ import { STATUS, STORAGE_KEY, BUTTONS } from './constants';
 export default class controller {
   game: null
   view: null
-  menu: null
+  menu: HTMLElement
 
-  constructor(game : any, view : any, menu: any) {
+  constructor(game : any, view : any, menu: HTMLElement) {
     this.game = game;
     this.view = view;
     this.menu = menu;

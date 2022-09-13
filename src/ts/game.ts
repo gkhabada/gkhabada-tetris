@@ -1,6 +1,6 @@
 import { STATUS, STORAGE_KEY } from "./constants";
 
-type tBlock = Array<Array<number>>;
+type tBlock = (string|number)[][];
 
 interface iItem {
   x: number,
@@ -20,7 +20,7 @@ export default class game {
     this.cols = cols;
   }
 
-  private readonly blockTypes : any = {
+  private readonly blockTypes : {[name: string]: (string|number)[][]} = {
     'I': [
       [0, 0, 0, 0],
       ['I', 'I', 'I', 'I'],
@@ -60,14 +60,14 @@ export default class game {
 
   
   // eslint-disable-next-line
-  private readonly pointsCount: any = {
+  private readonly pointsCount: {[name: number]: number} = {
     1: 100,
     2: 300,
     3: 700,
     4: 1500,
   };
 
-  get speed() {
+  get speed() : number {
     if (this.totalPoint > 10000) return 300;
     if (this.totalPoint > 7000) return 400;
     if (this.totalPoint > 3000) return 500;
@@ -219,18 +219,12 @@ export default class game {
     const fillLines = [];
 
     const newRow : Array<number> = new Array(10).fill(0, 0);
-    // const newRow : Array<number> = [];
-    // for (let col = 0; col < colsLength; col++) {
-    //   newRow.push(0);
-    // }
 
     for(let row = rowsLength - 1; row; row--) {
       const lineItems = space[row].filter((item: [number]) => item).length;
       
       if (lineItems === colsLength) {
         fillLines.push(row);
-        // eslint-disable-next-line
-        // debugger;
       }
     }
 
@@ -238,15 +232,9 @@ export default class game {
     console.log('fillLines', fillLines);
     
     fillLines.forEach((line : number, index) => {
-      // eslint-disable-next-line
-      // debugger;
-
       // если 2 и более строк то индекс смещается вниз, по мере удаления строк
       this.space.splice(line + index, 1);
       this.space.unshift([...newRow]);
-
-      // eslint-disable-next-line
-      // debugger;
     });
 
     this.totalPoint += this.pointsCount[fillLines.length] || 0;

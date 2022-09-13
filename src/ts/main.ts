@@ -7,5 +7,4 @@ const menu = document.getElementById('menu') as HTMLElement;
 
 const game = new Game(20, 10);
 const view = new View(app, 320, 640, 20, 10, menu);
-
-Controller(game, view, menu);
+new Controller(game, view, menu);

@@ -38,7 +38,7 @@ export default class view {
     this.cellWidth = this.width / this.cols;
   }
 
-  static readonly itemColor : any = {
+  static readonly itemColor : {[name: string]: string} = {
     'I': 'cyan',
     'J': 'blue',
     'L': 'orange',
