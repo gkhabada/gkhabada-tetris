@@ -68,7 +68,8 @@ export default class game {
   };
 
   get speed() : number {
-    return Math.ceil((100 - this.totalPoint / 100)/10) * 100
+    const speed = Math.ceil((100 - this.totalPoint / 100)/10) * 70;
+    return Math.max(speed, 100);
   }
   
   status: number = STATUS.new;
@@ -232,7 +233,7 @@ export default class game {
 
     this.totalPoint += this.pointsCount[fillLines.length] || 0;
 
-    const storageScore  = Number(localStorage.getItem(STORAGE_KEY) || 0);
+    const storageScore = Number(localStorage.getItem(STORAGE_KEY) || 0);
     localStorage.setItem(STORAGE_KEY, `${Math.max(this.totalPoint, storageScore)}`);
 
     if (fillLines.length) {

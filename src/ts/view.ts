@@ -1,4 +1,4 @@
-import { STATUS, BUTTONS, buttonsText } from './constants';
+import { STATUS, BUTTONS, buttonsText, STORAGE_KEY } from './constants';
 
 export default class view {
   element: HTMLElement
@@ -7,8 +7,8 @@ export default class view {
   height: number
   rows: number
   cols: number
-  canvas: HTMLCanvasElement
   context: CanvasRenderingContext2D
+  nextElemCanvas: CanvasRenderingContext2D
   cellWidth: number
 
 
@@ -27,18 +27,25 @@ export default class view {
     this.rows = rows;
     this.cols = cols;
 
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    this.canvas.style.border = 'black 1px solid';
+    const canvas = document.createElement('canvas');
+    canvas.width = this.width;
+    canvas.height = this.height;
     
-    this.element.appendChild(this.canvas);
+    this.element.appendChild(canvas);
 
-    this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+    this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
     this.cellWidth = this.width / this.cols;
+
+    const canvasForNextElem = document.createElement('canvas');
+    canvasForNextElem.width = 60;
+    canvasForNextElem.height = 60;
+    canvasForNextElem.setAttribute('id', 'canvas-next');
+    this.element.appendChild(canvasForNextElem);
+
+    this.nextElemCanvas = canvasForNextElem.getContext('2d') as CanvasRenderingContext2D;
   }
 
-  static readonly itemColor : {[name: string]: string} = {
+  readonly itemColor : {[name: string]: string} = {
     'I': 'cyan',
     'J': 'blue',
     'L': 'orange',
@@ -57,10 +64,10 @@ export default class view {
     this.context.clearRect(0, 0, this.width, this.height);
   }
 
-  renderGameSpace(playSpace: Array<Array<number>>) {    
+  renderGameSpace(playSpace: Array<Array<number>>) { 
     for(let row = 0; row < this.rows; row++) {
       for(let col = 0; col < this.cols; col++) {
-        this.context.fillStyle = view.itemColor[playSpace[row][col]] || 'white';
+        this.context.fillStyle = this.itemColor[playSpace[row][col]] || 'white';
         this.context.fillRect(col * this.cellWidth, row * this.cellWidth, this.cellWidth, this.cellWidth);
         this.context.strokeStyle = '#fafafa';
         this.context.lineWidth = 1;
@@ -69,12 +76,26 @@ export default class view {
     }
   }
 
-  setScore(points: number, speed: number) {
+  renderNextItem(item : (number|string)[][]) {
+    for(let row = 0; row < this.rows; row++) {
+      for(let col = 0; col < this.cols; col++) {
+        this.nextElemCanvas.fillStyle = this.itemColor[item?.[row]?.[col]] || 'white';
+        this.nextElemCanvas.fillRect(col * this.cellWidth / 2, row * this.cellWidth / 2, this.cellWidth / 2, this.cellWidth / 2);
+        this.nextElemCanvas.strokeStyle = '#fafafa';
+        this.nextElemCanvas.lineWidth = 1;
+        this.nextElemCanvas.strokeRect(col * this.cellWidth / 2, row * this.cellWidth / 2, this.cellWidth / 2, this.cellWidth / 2);
+      }
+    }
+  }
+
+  setScore(points: number) {
     const infoElem = document.getElementById('tetris__info') as HTMLElement;
     const scoreElem = infoElem.querySelector('.score') as HTMLElement;
     scoreElem.innerHTML = `${points}`;
-    const speedElem = infoElem.querySelector('.speed') as HTMLElement;
-    speedElem.innerHTML = ` ${speed}`;
+
+    const recordScore = localStorage.getItem(STORAGE_KEY);
+    const recordElem = infoElem.querySelector('.record') as HTMLElement;
+    recordElem.innerHTML = ` ${recordScore || 0}`;
   }
 
   setMenuButtons(buttons: Array<string>) {

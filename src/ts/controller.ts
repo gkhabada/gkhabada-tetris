@@ -37,7 +37,7 @@ export default class controller {
           break;
         case 'ArrowDown':
           this.game.moveItemDown();
-          this.view.setScore(this.game.totalPoint, this.game.speed);
+          this.view.setScore(this.game.totalPoint);
 
           if (this.currentSpeed !== this.game.speed) {
             clearInterval(this.gameProcess);
@@ -49,6 +49,7 @@ export default class controller {
             this.view.changeStatus(this.game.status);
           } else {
             this.view.render(this.game.getPlaySpace());
+            this.view.renderNextItem(this.game.nextItem.block);
           }
           break;
         case 'ArrowUp':
@@ -99,6 +100,7 @@ export default class controller {
 
   startGame() {
     this.view.render(this.game.getPlaySpace());
+    this.view.renderNextItem(this.game.nextItem.block);
 
     if (this.game.status === STATUS.game_over) {
       this.game.restart();
@@ -115,13 +117,14 @@ export default class controller {
 
   playing() {
     this.game.moveItemDown();
-    this.view.setScore(this.game.totalPoint, this.game.speed);
+    this.view.setScore(this.game.totalPoint);
 
     if (this.game.status === STATUS.game_over) {
       clearInterval(this.gameProcess);
       this.view.changeStatus(STATUS.game_over);
     } else {
       this.view.render(this.game.getPlaySpace());
+      this.view.renderNextItem(this.game.nextItem.block);
     }
   }
 } 

@@ -36,6 +36,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 
 .tetris__menu:after {
@@ -46,6 +47,16 @@ h1 {
   left: 0;
   top: 0; 
   position: absolute;
+}
+
+canvas {
+  border: 1px solid black;
+}
+
+#canvas-next {
+  position: absolute;
+  right: 20px;
+  top: 100px;
 }
 
 .menu__list {
