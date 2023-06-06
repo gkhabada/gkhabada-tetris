@@ -1,4 +1,4 @@
-import { STATUS, BUTTONS, buttonsText, STORAGE_KEY } from './constants';
+import { STATUS, BUTTONS, buttonsText, STORAGE_KEY_SCORE } from './constants';
 
 export default class view {
   element: HTMLElement
@@ -14,7 +14,7 @@ export default class view {
 
   constructor(
     element: HTMLElement,
-    width: number, 
+    width: number,
     height: number,
     rows: number,
     cols: number,
@@ -30,7 +30,7 @@ export default class view {
     const canvas = document.createElement('canvas');
     canvas.width = this.width;
     canvas.height = this.height;
-    
+
     this.element.appendChild(canvas);
 
     this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -64,7 +64,7 @@ export default class view {
     this.context.clearRect(0, 0, this.width, this.height);
   }
 
-  renderGameSpace(playSpace: Array<Array<number>>) { 
+  renderGameSpace(playSpace: Array<Array<number>>) {
     for(let row = 0; row < this.rows; row++) {
       for(let col = 0; col < this.cols; col++) {
         this.context.fillStyle = this.itemColor[playSpace[row][col]] || 'white';
@@ -93,70 +93,9 @@ export default class view {
     const scoreElem = infoElem.querySelector('.score') as HTMLElement;
     scoreElem.innerHTML = `${points}`;
 
-    const recordScore = localStorage.getItem(STORAGE_KEY);
+    const recordScore = localStorage.getItem(STORAGE_KEY_SCORE);
     const recordElem = infoElem.querySelector('.record') as HTMLElement;
     recordElem.innerHTML = ` ${recordScore || 0}`;
   }
 
-  setMenuButtons(buttons: Array<string>) {
-    const menuList = this.menu.querySelector('.menu__list') as HTMLElement;
-    menuList.innerHTML = '';
-    buttons.forEach((button: string) => {
-      menuList.insertAdjacentHTML('beforeend', `
-        <li>
-          <button data-status="${button}" class="menu__item">${buttonsText[button]}</button>
-        </li>
-      `);
-    });
-  }
-
-  changeStatus(status : number) {
-    switch (status) {
-      case STATUS.pause:
-        this.setMenuButtons([BUTTONS.resume, BUTTONS.restart, BUTTONS.score, BUTTONS.settings]);
-        this.menu.style.display = 'flex';
-        break;
-      case STATUS.game_over:
-        this.setMenuButtons([BUTTONS.restart, BUTTONS.score, BUTTONS.settings]);
-        this.menu.style.display = 'flex';
-        break;
-      case STATUS.new:
-        this.setMenuButtons([BUTTONS.play, BUTTONS.score, BUTTONS.settings]);
-        this.menu.style.display = 'flex';
-        break;
-      default:
-        this.menu.style.display = "none";
-    }    
-  }
-
-  showScore(score: number) {
-    const menuList = this.menu.querySelector('.menu__list') as HTMLElement;
-    this.setMenuButtons([BUTTONS.close]);
-    menuList.insertAdjacentHTML('afterbegin', `
-      <li>Ваш максимально набранный балл: ${score}</li>
-    `);
-  }
-
-  showSettingMenu() {
-    const menuList = this.menu.querySelector('.menu__list') as HTMLElement;
-    this.setMenuButtons([BUTTONS.close]);
-
-    menuList.insertAdjacentHTML('afterbegin', `
-      <li class="menu__item-setting">
-        <label for="name">Имя пользователя</label>
-        <input id="name" value="User">
-      </li>
-      <li class="menu__item-setting">
-        <label for="size">Размер поля</label>
-        <select id="size">
-          <option>Маленький (7x14)</option>
-          <option>Средний (10x20)</option>
-          <option>Большой (15x30)</option>
-        </select>
-      </li>
-      <li>
-        <button class="menu__item">Сохранить</button>
-      </li>
-    `);
-  }
 }

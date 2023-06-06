@@ -13,6 +13,10 @@ body {
   background-color: #fafafa;
   min-height: 100vh;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 h1 {
@@ -45,12 +49,13 @@ h1 {
   height: 100%;
   background-color: rgba(0, 0, 0, .8);
   left: 0;
-  top: 0; 
+  top: 0;
   position: absolute;
 }
 
 canvas {
   border: 1px solid black;
+  width: fit-content;
 }
 
 #canvas-next {
@@ -108,7 +113,7 @@ canvas {
   text-align: left;
 }
 
-.menu__item-setting input, 
+.menu__item-setting input,
 .menu__item-setting select {
   padding: 6px 12px;
   font-size: 16px;

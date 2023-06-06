@@ -5,9 +5,7 @@ export enum STATUS {
   new = 4,
 }
 
-export const STORAGE_KEY = 'TETRIS_SCORE';
-
-export const BUTTONS : { [name: string]: string } = { 
+export const BUTTONS : { [name: string]: string } = {
   play: 'play',
   resume: 'resume',
   restart: 'restart',
@@ -25,3 +23,20 @@ export const buttonsText : { [name: string]: string } = {
   [BUTTONS.settings]: 'Настройки',
   [BUTTONS.close]: 'Назад',
 };
+
+// settings
+
+export const STORAGE_KEY_SCORE = 'TETRIS_SCORE';
+export const STORAGE_KEY_SETTINGS = 'TETRIS_SETTINGS';
+
+export const FIELD_SIZE_NAMES : { [name: string]: string } = {
+  small: 'small',
+  middle: 'middle',
+  large: 'large',
+}
+
+export const FIELD_SIZE_VALUES : { [name: string]: { cols: number,   rows : number } } = {
+  [FIELD_SIZE_NAMES.small]: { cols: 7, rows: 14 },
+  [FIELD_SIZE_NAMES.middle]: { cols: 10, rows: 20 },
+  [FIELD_SIZE_NAMES.large]: { cols: 15, rows: 30 },
+}

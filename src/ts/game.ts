@@ -1,4 +1,4 @@
-import { STATUS, STORAGE_KEY } from "./constants";
+import { STATUS, STORAGE_KEY_SCORE } from "./constants";
 
 type tBlock = (string|number)[][];
 
@@ -58,7 +58,7 @@ export default class game {
     ],
   };
 
-  
+
   // eslint-disable-next-line
   private readonly pointsCount: {[name: number]: number} = {
     1: 100,
@@ -71,7 +71,7 @@ export default class game {
     const speed = Math.ceil((100 - this.totalPoint / 100)/10) * 70;
     return Math.max(speed, 100);
   }
-  
+
   status: number = STATUS.new;
 
   space: tBlock = [];
@@ -96,9 +96,9 @@ export default class game {
     const blockNames : Array<string> = Object.keys(this.blockTypes);
     const randomKey : string = blockNames[Math.floor(Math.random() * blockNames.length)];
     const blockValue: tBlock = this.blockTypes[randomKey];
-    
-    const offsetX : number = Math.floor((10 / 2) - (blockValue .length / 2)); 
-    
+
+    const offsetX : number = Math.floor((10 / 2) - (blockValue.length / 2));
+
     return {
       x: offsetX,
       y: -1,
@@ -126,15 +126,15 @@ export default class game {
     for (let row = 0; row < block.length; row++) {
       for (let col = 0; col <block[row].length; col++) {
         if (
-          block[row][col] 
-          && ((this.space[y + row] === undefined || this.space[y + row][x + col] === undefined) 
+          block[row][col]
+          && ((this.space[y + row] === undefined || this.space[y + row][x + col] === undefined)
           || this.space[y + row][x + col])
         ) {
           return true;
         }
       }
     }
-    return false; 
+    return false;
   }
 
 
@@ -170,10 +170,10 @@ export default class game {
     const length = block.length;
 
     const rotateBlock = this.createSpace(length, length);
-    
+
     for (let y = 0; y < length; y++) {
       for(let x = 0; x < length; x++) {
-        rotateBlock[x][y] = block[length - 1 - y][x];        
+        rotateBlock[x][y] = block[length - 1 - y][x];
       }
     }
 
@@ -215,11 +215,11 @@ export default class game {
     const colsLength = space[0].length;
     const fillLines = [];
 
-    const newRow : Array<number> = new Array(10).fill(0, 0);
+    const newRow : Array<number> = new Array(this.cols).fill(0, 0);
 
     for(let row = rowsLength - 1; row; row--) {
       const lineItems = space[row].filter((item: [number]) => item).length;
-      
+
       if (lineItems === colsLength) {
         fillLines.push(row);
       }
@@ -233,8 +233,8 @@ export default class game {
 
     this.totalPoint += this.pointsCount[fillLines.length] || 0;
 
-    const storageScore = Number(localStorage.getItem(STORAGE_KEY) || 0);
-    localStorage.setItem(STORAGE_KEY, `${Math.max(this.totalPoint, storageScore)}`);
+    const storageScore = Number(localStorage.getItem(STORAGE_KEY_SCORE) || 0);
+    localStorage.setItem(STORAGE_KEY_SCORE, `${Math.max(this.totalPoint, storageScore)}`);
 
     if (fillLines.length) {
       this.clearLines();
@@ -251,5 +251,5 @@ export default class game {
     this.space = this.createSpace(this.rows, this.cols);
     this.totalPoint = 0;
   }
-  
+
 }
