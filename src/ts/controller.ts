@@ -31,7 +31,7 @@ export default class controller {
           break;
         case 'ArrowDown':
           this.game.moveItemDown();
-          this.view.setScore(this.game.totalPoint);
+          this.game.setScore();
 
           if (this.currentSpeed !== this.game.speed) {
             clearInterval(this.gameProcess);
@@ -76,7 +76,7 @@ export default class controller {
 
   playing() {
     this.game.moveItemDown();
-    this.view.setScore(this.game.totalPoint);
+    this.game.setScore();
 
     if (this.game.status === STATUS.game_over) {
       clearInterval(this.gameProcess);

@@ -11,6 +11,7 @@ export const BUTTONS : { [name: string]: string } = {
   restart: 'restart',
   score: 'score',
   settings: 'settings',
+  saveSettings: 'saveSettings',
 
   close: 'close',
 };
@@ -21,6 +22,7 @@ export const buttonsText : { [name: string]: string } = {
   [BUTTONS.restart]: 'Начать заново',
   [BUTTONS.score]: 'Результаты',
   [BUTTONS.settings]: 'Настройки',
+  [BUTTONS.saveSettings]: 'Сохранить',
   [BUTTONS.close]: 'Назад',
 };
 

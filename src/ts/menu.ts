@@ -1,4 +1,4 @@
-import { STATUS, BUTTONS, buttonsText, STORAGE_KEY_SCORE, STORAGE_KEY_SETTINGS, FIELD_SIZE_NAMES } from './constants';
+import { STATUS, BUTTONS, buttonsText, STORAGE_KEY_SCORE, STORAGE_KEY_SETTINGS, FIELD_SIZE_NAMES, FIELD_SIZE_VALUES } from './constants';
 
 export default class view {
   menu: HTMLElement
@@ -20,9 +20,7 @@ export default class view {
     menu.addEventListener('click', this.menuClick.bind(this));
     this.settings = this.getSettings();
 
-    this.changeStatus(this.game.status);
-
-    // TODO: нужно отследить изменение статуса в this.ga
+    this.watchGameStatus();
   }
 
   menuClick(e: any) {
@@ -51,6 +49,18 @@ export default class view {
           this.changeStatus(this.game.status);
           break;
         }
+        case BUTTONS.saveSettings: {
+          this.settings.name = document.querySelector('#name')?.value;
+          this.settings.size = document.querySelector('#size')?.value;
+
+          this.game.updateSpaceSize(FIELD_SIZE_VALUES[this.settings.size]);
+          this.view.updateSpaceSize(FIELD_SIZE_VALUES[this.settings.size]);
+
+          this.saveSettings();
+          this.game.restart();
+          this.changeStatus(STATUS.new);
+          break;
+        }
         default: {
           console.log('status', e.target.dataset.status);
         }
@@ -68,6 +78,18 @@ export default class view {
         </li>
       `);
     });
+  }
+
+  watchGameStatus() {
+    let gameStatus : STATUS = this.game.status;
+    this.changeStatus(gameStatus);
+
+    setInterval(() => {
+      if (gameStatus !== this.game.getStatus) {
+        gameStatus = this.game.getStatus;
+        this.changeStatus(gameStatus);
+      }
+    }, 100);
   }
 
   /**
@@ -97,13 +119,13 @@ export default class view {
     const menuList = this.menu.querySelector('.menu__list') as HTMLElement;
     this.setMenuButtons([BUTTONS.close]);
     menuList.insertAdjacentHTML('afterbegin', `
-      <li>Ваш максимально набранный балл: ${score}</li>
+      <li>Ваш максимально набранный балл: <b>${score}</b></li>
     `);
   }
 
   showSettingMenu() {
     const menuList = this.menu.querySelector('.menu__list') as HTMLElement;
-    this.setMenuButtons([BUTTONS.close]);
+    this.setMenuButtons([BUTTONS.saveSettings, BUTTONS.close]);
 
     menuList.insertAdjacentHTML('afterbegin', `
       <li class="menu__item-setting">
@@ -118,7 +140,7 @@ export default class view {
             value="${FIELD_SIZE_NAMES.small}"
           >Маленький (7x14)</option>
           <option
-            ${this.settings.size === FIELD_SIZE_NAMES.middle ? 'selected' : ''}
+            ${!this.settings.size || this.settings.size === FIELD_SIZE_NAMES.middle ? 'selected' : ''}
             value="${FIELD_SIZE_NAMES.middle}"
           >Средний (10x20)</option>
           <option
@@ -127,16 +149,7 @@ export default class view {
           >Большой (15x30)</option>
         </select>
       </li>
-      <li>
-        <button id="saveBtn" class="menu__item">Сохранить</button>
-      </li>
     `);
-
-    document.querySelector('#saveBtn')?.addEventListener('click', () => {
-      this.settings.name = document.querySelector('#name')?.value;
-      this.settings.size = document.querySelector('#size')?.value;
-      this.saveSettings();
-    });
   }
 
   getSettings() {

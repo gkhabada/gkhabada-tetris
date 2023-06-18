@@ -1,27 +1,12 @@
-import { STATUS, BUTTONS, buttonsText, STORAGE_KEY_SCORE } from './constants';
-
 export default class view {
-  element: HTMLElement
-  menu: HTMLElement
-  width: number
-  height: number
-  rows: number
-  cols: number
-  context: CanvasRenderingContext2D
-  nextElemCanvas: CanvasRenderingContext2D
-  cellWidth: number
-
-
   constructor(
     element: HTMLElement,
     width: number,
     height: number,
     rows: number,
     cols: number,
-    menu: HTMLElement,
   ) {
     this.element = element;
-    this.menu = menu;
     this.width = width;
     this.height = height;
     this.rows = rows;
@@ -43,6 +28,21 @@ export default class view {
     this.element.appendChild(canvasForNextElem);
 
     this.nextElemCanvas = canvasForNextElem.getContext('2d') as CanvasRenderingContext2D;
+  }
+
+  element: HTMLElement
+  width: number
+  height: number
+  context: CanvasRenderingContext2D
+  nextElemCanvas: CanvasRenderingContext2D
+  cellWidth: number
+
+  rows: number
+  cols: number
+  updateSpaceSize({ rows, cols }: { rows: number, cols: number }) {
+    this.rows = rows;
+    this.cols = cols;
+    this.cellWidth = this.width / this.cols;
   }
 
   readonly itemColor : {[name: string]: string} = {
@@ -86,16 +86,6 @@ export default class view {
         this.nextElemCanvas.strokeRect(col * this.cellWidth / 2, row * this.cellWidth / 2, this.cellWidth / 2, this.cellWidth / 2);
       }
     }
-  }
-
-  setScore(points: number) {
-    const infoElem = document.getElementById('tetris__info') as HTMLElement;
-    const scoreElem = infoElem.querySelector('.score') as HTMLElement;
-    scoreElem.innerHTML = `${points}`;
-
-    const recordScore = localStorage.getItem(STORAGE_KEY_SCORE);
-    const recordElem = infoElem.querySelector('.record') as HTMLElement;
-    recordElem.innerHTML = ` ${recordScore || 0}`;
   }
 
 }

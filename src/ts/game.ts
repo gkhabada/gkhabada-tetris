@@ -9,13 +9,18 @@ interface iItem {
 }
 
 export default class game {
-  rows: number
-  cols: number
-
   constructor(
     rows: number,
     cols: number,
   ) {
+    this.rows = rows;
+    this.cols = cols;
+  }
+
+  rows: number
+  cols: number
+
+  updateSpaceSize({ rows, cols }: { rows: number, cols: number }) {
     this.rows = rows;
     this.cols = cols;
   }
@@ -58,7 +63,6 @@ export default class game {
     ],
   };
 
-
   // eslint-disable-next-line
   private readonly pointsCount: {[name: number]: number} = {
     1: 100,
@@ -72,7 +76,10 @@ export default class game {
     return Math.max(speed, 100);
   }
 
-  status: number = STATUS.new;
+  private status: number = STATUS.new;
+  get getStatus() {
+    return this.status;
+  }
 
   space: tBlock = [];
   totalPoint = 0;
@@ -136,7 +143,6 @@ export default class game {
     }
     return false;
   }
-
 
   moveItemLeft() {
     this.activeItem.x -= 1;
@@ -252,4 +258,13 @@ export default class game {
     this.totalPoint = 0;
   }
 
+  setScore() {
+    const infoElem = document.getElementById('tetris__info') as HTMLElement;
+    const scoreElem = infoElem.querySelector('.score') as HTMLElement;
+    scoreElem.innerHTML = `${this.totalPoint}`;
+
+    const recordScore = localStorage.getItem(STORAGE_KEY_SCORE);
+    const recordElem = infoElem.querySelector('.record') as HTMLElement;
+    recordElem.innerHTML = ` ${recordScore || 0}`;
+  }
 }
