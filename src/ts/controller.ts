@@ -7,7 +7,7 @@ export default class controller {
   gameProcess = 0;
   currentSpeed = 0;
 
-  constructor(game : any, view : any) {
+  constructor(game : unknown, view : unknown) {
     this.game = game;
     this.view = view;
 

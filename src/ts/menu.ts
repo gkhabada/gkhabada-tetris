@@ -62,6 +62,7 @@ export default class view {
           break;
         }
         default: {
+          // eslint-disable-next-line
           console.log('status', e.target.dataset.status);
         }
       }

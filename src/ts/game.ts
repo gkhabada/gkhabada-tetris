@@ -15,6 +15,9 @@ export default class game {
   ) {
     this.rows = rows;
     this.cols = cols;
+
+    this.activeItem = this.createItem();
+    this.nextItem = this.createItem();
   }
 
   rows: number
@@ -83,8 +86,8 @@ export default class game {
 
   space: tBlock = [];
   totalPoint = 0;
-  activeItem : iItem = this.createItem();
-  nextItem: iItem = this.createItem();
+  activeItem : iItem
+  nextItem: iItem
 
   createSpace(rows: number, cols: number) {
     const space : tBlock = [];
@@ -104,7 +107,7 @@ export default class game {
     const randomKey : string = blockNames[Math.floor(Math.random() * blockNames.length)];
     const blockValue: tBlock = this.blockTypes[randomKey];
 
-    const offsetX : number = Math.floor((10 / 2) - (blockValue.length / 2));
+    const offsetX : number = Math.floor((this.cols / 2) - (blockValue.length / 2));
 
     return {
       x: offsetX,
@@ -160,7 +163,7 @@ export default class game {
     }
   }
 
-  moveItemDown() {
+  moveItemDown(): void {
     this.activeItem.y += 1;
 
     if (this.blockIsOffset()) {
