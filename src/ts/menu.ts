@@ -50,8 +50,8 @@ export default class view {
           break;
         }
         case BUTTONS.saveSettings: {
-          this.settings.name = document.querySelector('#name')?.value;
-          this.settings.size = document.querySelector('#size')?.value;
+          this.settings.name = (document.querySelector('#name') as HTMLInputElement)?.value;
+          this.settings.size = (document.querySelector('#size') as HTMLInputElement)?.value;
 
           this.game.updateSpaceSize(FIELD_SIZE_VALUES[this.settings.size]);
           this.view.updateSpaceSize(FIELD_SIZE_VALUES[this.settings.size]);
